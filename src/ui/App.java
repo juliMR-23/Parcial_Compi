@@ -1,18 +1,18 @@
 package ui;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javax.swing.*;
+import java.awt.*;
 
-public class App extends Application {
+public class App extends JFrame {
 
-    @Override
-    public void start(Stage primaryStage) {
-        Scene scene = new Scene(new LandingPage(), 1000, 700);
-        primaryStage.setTitle("The Feline Graph Chronicles");
-        primaryStage.setScene(scene);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
-        primaryStage.show();
+    public App() {
+        setTitle("The Feline Graph Chronicles");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(1100, 700);
+        setMinimumSize(new Dimension(850, 600));
+        setLocationRelativeTo(null);
+        setBackground(new Color(10, 10, 26));
+        setContentPane(new LandingPage());
+        setVisible(true);
     }
 }
