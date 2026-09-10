@@ -1,85 +1,179 @@
 package ui;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 
-public class LandingPage extends BorderPane {
+public class LandingPage extends JPanel {
 
-    private static final String BG = "#1a1a2e";
-    private static final String PANEL = "#16213e";
+    private static final Color BG = new Color(10, 10, 26);
+    private static final Color BG_CARD = new Color(15, 15, 40);
+    private static final Color NEON_CYAN = new Color(0, 255, 245);
+    private static final Color NEON_MAGENTA = new Color(255, 0, 255);
+    private static final Color NEON_PINK = new Color(255, 42, 109);
+    private static final Color NEON_GREEN = new Color(5, 255, 161);
+    private static final Color NEON_AMBER = new Color(255, 149, 0);
+    private static final Color NEON_VIOLET = new Color(191, 0, 255);
+    private static final Color TEXT_DIM = new Color(120, 120, 160);
 
     public LandingPage() {
-        setStyle("-fx-background-color: " + BG + ";");
-        setTop(createHeader());
-        setCenter(createContent());
-        setBottom(createFooter());
+        setLayout(new BorderLayout());
+        setBackground(BG);
+        add(createHeader(), BorderLayout.NORTH);
+        add(createContent(), BorderLayout.CENTER);
+        add(createFooter(), BorderLayout.SOUTH);
     }
 
-    private VBox createHeader() {
-        Label title = new Label("The Feline Graph Chronicles");
-        title.setStyle("-fx-text-fill: #e94560; -fx-font-size: 28px; -fx-font-weight: bold;");
+    private JPanel createHeader() {
+        JLabel title = new JLabel("THE FELINE GRAPH CHRONICLES");
+        title.setForeground(NEON_CYAN);
+        title.setFont(new Font("Consolas", Font.BOLD, 28));
+        title.setHorizontalAlignment(SwingConstants.CENTER);
+        title.setBorder(BorderFactory.createEmptyBorder(35, 0, 5, 0));
 
-        Label subtitle = new Label("Pola \u2022 Minerva \u2022 Nina \u2022 Lim\u00f3n");
-        subtitle.setStyle("-fx-text-fill: #7f8c8d; -fx-font-size: 14px;");
+        JLabel subtitle = new JLabel("\u25C6  Pola  \u25C6  Minerva  \u25C6  Nina  \u25C6  Limón  \u25C6");
+        subtitle.setForeground(NEON_MAGENTA);
+        subtitle.setFont(new Font("Consolas", Font.PLAIN, 12));
+        subtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        VBox header = new VBox(5, title, subtitle);
-        header.setAlignment(Pos.CENTER);
-        header.setPadding(new Insets(30, 0, 20, 0));
+        JLabel tagline = newLabel("Decodifica los grafos. Rescata a Nina. Derrota a Limón.");
+        tagline.setForeground(TEXT_DIM);
+        tagline.setFont(new Font("Consolas", Font.ITALIC, 11));
+        tagline.setHorizontalAlignment(SwingConstants.CENTER);
+        tagline.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        JPanel header = new JPanel();
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        header.setBackground(BG);
+        header.add(title);
+        header.add(subtitle);
+        header.add(tagline);
         return header;
     }
 
-    private VBox createContent() {
-        Label sectionTitle = new Label("Misiones");
-        sectionTitle.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
+    private JPanel createContent() {
+        JPanel grid = new JPanel(new GridLayout(1, 4, 20, 0));
+        grid.setBackground(BG);
+        grid.setBorder(BorderFactory.createEmptyBorder(20, 50, 30, 50));
 
-        HBox buttons = new HBox(15,
-            createMissionButton("Misi\u00f3n 1 \u2014 Pola", "#3498db", "BFS & DFS"),
-            createMissionButton("Misi\u00f3n 2 \u2014 Minerva", "#9b59b6", "Dijkstra"),
-            createMissionButton("Misi\u00f3n 3 \u2014 Nina", "#e74c3c", "Floyd-Warshall & Bellman-Ford"),
-            createMissionButton("Misi\u00f3n 4 \u2014 Lim\u00f3n", "#2ecc71", "Kruskal")
-        );
-        buttons.setAlignment(Pos.CENTER);
+        grid.add(new MissionCard("MISIÓN 1", "Pola", "BFS & DFS", NEON_AMBER,
+            "Rescata Nina del campo de minas"));
+        grid.add(new MissionCard("MISIÓN 2", "Minerva", "Dijkstra", NEON_VIOLET,
+            "Recupera las cuentas de Claude"));
+        grid.add(new MissionCard("MISIÓN 3", "Nina", "Floyd-Warshall & Bellman-Ford", NEON_PINK,
+            "El almacén definitivo de churun"));
+        grid.add(new MissionCard("MISIÓN 4", "Limón", "Kruskal", NEON_GREEN,
+            "Reconecta la red destruida"));
 
-        VBox content = new VBox(20, sectionTitle, buttons);
-        content.setAlignment(Pos.CENTER);
-        content.setPadding(new Insets(40));
-        return content;
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setBackground(BG);
+        wrapper.add(grid, BorderLayout.CENTER);
+        return wrapper;
     }
 
-    private VBox createMissionButton(String title, String color, String algo) {
-        Label titleLabel = new Label(title);
-        titleLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
-
-        Label algoLabel = new Label(algo);
-        algoLabel.setStyle("-fx-text-fill: rgba(255,255,255,0.7); -fx-font-size: 11px;");
-
-        VBox box = new VBox(4, titleLabel, algoLabel);
-        box.setAlignment(Pos.CENTER);
-        box.setStyle(
-            "-fx-background-color: " + color + ";" +
-            "-fx-background-radius: 10;" +
-            "-fx-padding: 20 30;" +
-            "-fx-cursor: hand;"
-        );
-        box.setMinWidth(200);
-        box.setOnMouseClicked(e -> {
-            // TODO: Implementar navegacion a cada mision
-        });
-
-        return box;
+    private JLabel newLabel(String text) {
+        JLabel label = new JLabel(text);
+        return label;
     }
 
-    private Label createFooter() {
-        Label footer = new Label("Scaffolding inicial \u2014 Pr\u00f3ximamente se implementar\u00e1n las misiones");
-        footer.setStyle("-fx-text-fill: #34495e; -fx-font-size: 11px;");
-        BorderPane.setAlignment(footer, Pos.CENTER);
-        BorderPane.setMargin(footer, new Insets(10));
+    private JLabel createFooter() {
+        JLabel footer = new JLabel("Scaffolding inicial \u2014 Próximamente se implementarán las misiones");
+        footer.setForeground(new Color(50, 50, 80));
+        footer.setFont(new Font("Consolas", Font.PLAIN, 10));
+        footer.setHorizontalAlignment(SwingConstants.CENTER);
+        footer.setBorder(BorderFactory.createEmptyBorder(0, 0, 12, 0));
         return footer;
+    }
+
+    private static class MissionCard extends JPanel {
+
+        private final Color neonColor;
+        private boolean hovered = false;
+
+        MissionCard(String mission, String hero, String algorithm, Color neonColor, String description) {
+            this.neonColor = neonColor;
+            setLayout(new BorderLayout());
+            setBackground(BG_CARD);
+            setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(neonColor, 1),
+                BorderFactory.createEmptyBorder(20, 18, 20, 18)
+            ));
+            setPreferredSize(new Dimension(200, 220));
+
+            JLabel missionLabel = new JLabel(mission);
+            missionLabel.setForeground(neonColor);
+            missionLabel.setFont(new Font("Consolas", Font.BOLD, 11));
+
+            JLabel heroLabel = new JLabel(hero);
+            heroLabel.setForeground(Color.WHITE);
+            heroLabel.setFont(new Font("Consolas", Font.BOLD, 18));
+
+            JLabel algoLabel = new JLabel("<html><i>" + algorithm + "</i></html>");
+            algoLabel.setForeground(neonColor.darker());
+            algoLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
+
+            JLabel descLabel = new JLabel("<html>" + description + "</html>");
+            descLabel.setForeground(TEXT_DIM);
+            descLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
+
+            JPanel textPanel = new JPanel();
+            textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+            textPanel.setBackground(BG_CARD);
+            textPanel.add(missionLabel);
+            textPanel.add(Box.createVerticalStrut(6));
+            textPanel.add(heroLabel);
+            textPanel.add(Box.createVerticalStrut(10));
+            textPanel.add(algoLabel);
+            textPanel.add(Box.createVerticalStrut(8));
+            textPanel.add(descLabel);
+
+            add(textPanel, BorderLayout.CENTER);
+
+            setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    hovered = true;
+                    setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(neonColor, 2),
+                        BorderFactory.createEmptyBorder(19, 17, 19, 17)
+                    ));
+                    repaint();
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    hovered = false;
+                    setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(neonColor, 1),
+                        BorderFactory.createEmptyBorder(20, 18, 20, 18)
+                    ));
+                    repaint();
+                }
+            });
+
+            // TODO: Implementar navegacion a cada mision
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            if (hovered) {
+                g2.setColor(new Color(neonColor.getRed(), neonColor.getGreen(), neonColor.getBlue(), 25));
+                g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, 8, 8);
+
+                g2.setColor(new Color(neonColor.getRed(), neonColor.getGreen(), neonColor.getBlue(), 80));
+                g2.setStroke(new BasicStroke(1f));
+                g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 8, 8);
+            }
+
+            g2.dispose();
+        }
     }
 }
