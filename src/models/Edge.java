@@ -1,7 +1,6 @@
 package models;
 
 public class Edge implements Comparable<Edge> {
-    ///directed Edge
     private int source, target, weight;
     public Edge(int source, int target, int weight) {
         this.source = source;
