@@ -8,7 +8,7 @@ public class UnionFind{
         for (int i = 0; i < n; i++)
             parent[i]=i;
     }
-    int find(int x){//returns the root
+    public int find(int x){//returns the root
         if(parent[x]!=x)
             parent[x]=find(parent[x]);
         return parent[x];
