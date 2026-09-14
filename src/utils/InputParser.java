@@ -1,5 +1,11 @@
 package utils;
 
+import algorithms.KruskalSolver;
+
+import java.util.Scanner;
+
 public class InputParser {
-    // TODO: Implementar por el usuario
+    public String[] tokenize (String input){
+        return input.split("\\s+");
+    }
 }
