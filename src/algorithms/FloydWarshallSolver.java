@@ -16,7 +16,7 @@ public class FloydWarshallSolver {
         next = new int[V][V];
         inPositiveCycle = new boolean[V];
         for (int i = 0; i < V; i++) {
-            Arrays.fill(distances[i], Long.MAX_VALUE);
+            Arrays.fill(distances[i], Long.MIN_VALUE);
             Arrays.fill(next[i], -1);
             distances[i][i] = 0;
         }
@@ -31,8 +31,8 @@ public class FloydWarshallSolver {
         for (int k = 0; k < V; k++) {
             for (int i = 0; i < V; i++) {
                 for (int j = 0; j < V; j++) {
-                    if (distances[i][k] != Long.MAX_VALUE &&
-                            distances[k][j] != Long.MAX_VALUE) {
+                    if (distances[i][k] != Long.MIN_VALUE &&
+                            distances[k][j] != Long.MIN_VALUE) {
                         long newDist = distances[i][k] + distances[k][j];
                         if (newDist > distances[i][j]) {
                             distances[i][j] = newDist;

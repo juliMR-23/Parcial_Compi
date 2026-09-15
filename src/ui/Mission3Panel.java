@@ -72,9 +72,9 @@ public class Mission3Panel extends MissionPanel {
                 long maxChurun = floydResult[mc.S][mc.D];
 
                 sb.append("Case #").append(caseNum).append(": ");
-                if (bellmanResult[mc.D] == Long.MAX_VALUE) {
+                if (bellmanResult[mc.D] == Long.MIN_VALUE) {
                     sb.append("Limon blocked the way");
-                } else if (maxChurun == Long.MAX_VALUE) {
+                } else if (bellman.isAffectedByPositiveCycle(mc.D)) {
                     sb.append("Infinite churun!");
                 } else {
                     sb.append(maxChurun);
@@ -91,10 +91,10 @@ public class Mission3Panel extends MissionPanel {
                     }
                     canvas.setData(graph.getNodes(), graph.getEdges(), true);
 
-                    if (maxChurun == Long.MAX_VALUE) {
+                    if (bellman.isAffectedByPositiveCycle(mc.D)) {
                         List<Edge> cycleEdges = floyd.getCycleEdges();
                         canvas.setCycleEdges(cycleEdges);
-                    } else {
+                    } else if (maxChurun != Long.MIN_VALUE) {
                         List<Edge> pathEdges = floyd.getPathEdges(mc.S, mc.D);
                         canvas.setHighlightedEdges(pathEdges);
                     }
