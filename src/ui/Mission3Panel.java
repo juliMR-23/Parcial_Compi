@@ -110,7 +110,7 @@ public class Mission3Panel extends MissionPanel {
 
                 sb.append("Case #").append(i + 1).append(": ");
                 if (isBlocked.get(i)) {
-                    sb.append("Limon blocked the way");
+                    sb.append("Limón blocked the way");
                 } else if (hasInfinite.get(i)) {
                     sb.append("Infinite churun!");
                 } else {
@@ -163,7 +163,7 @@ public class Mission3Panel extends MissionPanel {
         matrixCanvas.setMatrix(floyd, floyd.getDistances(), mc.N);
 
         if (isBlocked.get(idx)) {
-            canvas.setStatusMessage("Limon blocked the way");
+            canvas.setStatusMessage("Limón blocked the way");
         } else if (hasInfinite.get(idx)) {
             canvas.setCycleEdges(floyd.getCycleEdges());
             canvas.setStatusMessage("Infinite churun!");

@@ -72,7 +72,7 @@ public class Mission4Panel extends MissionPanel {
 
                 sb.append("Case #").append(i + 1).append(": ");
                 if (result == -1) {
-                    sb.append("Limon cut too many cables");
+                    sb.append("Limón cut too many cables");
                 } else {
                     sb.append(result);
                 }
@@ -113,7 +113,7 @@ public class Mission4Panel extends MissionPanel {
         canvas.clearStatusMessage();
 
         if (results.get(idx) == -1) {
-            canvas.setStatusMessage("Limon cut too many cables");
+            canvas.setStatusMessage("Limón cut too many cables");
         } else {
             canvas.setHighlightedEdges(mstEdgesList.get(idx));
         }

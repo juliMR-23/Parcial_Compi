@@ -35,7 +35,6 @@ public class LandingPage extends JPanel {
         title.setForeground(NEON_CYAN);
         title.setFont(new Font("Consolas", Font.BOLD, 28));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setBorder(BorderFactory.createEmptyBorder(35, 0, 5, 0));
 
         JLabel subtitle = new JLabel("Pola  |  Minerva  |  Nina  |  Limón  |  Nero");
         subtitle.setForeground(NEON_MAGENTA);
@@ -46,21 +45,30 @@ public class LandingPage extends JPanel {
         tagline.setForeground(TEXT_DIM);
         tagline.setFont(new Font("Consolas", Font.ITALIC, 11));
         tagline.setHorizontalAlignment(SwingConstants.CENTER);
-        tagline.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        JPanel header = new JPanel();
-        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+        JPanel header = new JPanel(new GridBagLayout());
         header.setBackground(BG);
-        header.add(title);
-        header.add(subtitle);
-        header.add(tagline);
+        header.setBorder(BorderFactory.createEmptyBorder(30, 40, 10, 40));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 4, 0);
+
+        gbc.gridy = 0;
+        header.add(title, gbc);
+        gbc.gridy = 1;
+        header.add(subtitle, gbc);
+        gbc.gridy = 2;
+        gbc.insets = new Insets(6, 0, 0, 0);
+        header.add(tagline, gbc);
         return header;
     }
 
     private JPanel createContent() {
-        JPanel grid = new JPanel(new GridLayout(1, 4, 20, 0));
+        JPanel grid = new JPanel(new GridLayout(1, 4, 16, 0));
         grid.setBackground(BG);
-        grid.setBorder(BorderFactory.createEmptyBorder(20, 50, 30, 50));
+        grid.setBorder(BorderFactory.createEmptyBorder(16, 40, 24, 40));
 
         grid.add(createMissionCard("MISIÓN 1", "BFS & DFS", NEON_AMBER,
             "Navega un campo de minas R×C: halla la distancia mínima (BFS) y el orden de exploración (DFS) desde el inicio hasta Nina",
@@ -72,7 +80,7 @@ public class LandingPage extends JPanel {
             "Maximiza el churun recolectado en un grafo dirigido. Detecta ciclos de ganancia positiva → «Infinite churun!»",
             "mission3"));
         grid.add(createMissionCard("MISIÓN 4", "Kruskal", NEON_GREEN,
-            "Reconecta la red destruida con el costo mínimo posible (MST). Si no se puede conectar todo → «Limon cut too many cables»",
+            "Reconecta la red destruida con el costo mínimo posible (MST). Si no se puede conectar todo → «Limón cut too many cables»",
             "mission4"));
 
         JPanel wrapper = new JPanel(new BorderLayout());
@@ -155,7 +163,8 @@ public class LandingPage extends JPanel {
         card.setOpaque(false);
         card.setBackground(BG_CARD);
         card.setBorder(new RoundedBorder(neonColor, 1, radius));
-        card.setPreferredSize(new Dimension(200, 250));
+        card.setMinimumSize(new Dimension(160, 220));
+        card.setMaximumSize(new Dimension(300, 300));
         card.add(textPanel, BorderLayout.CENTER);
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 

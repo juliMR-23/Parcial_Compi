@@ -10,7 +10,7 @@ public class TokenReader {
 
     public int nextInt() throws InvalidInputException {
         if (pos >= tokens.length) {
-            throw new InvalidInputException("Se esperaba un entero pero no hay mas tokens (posicion " + pos + ").");
+            throw new InvalidInputException("Se esperaba un entero pero no hay más tokens (posición " + pos + ").");
         }
         String token = tokens[pos];
         try {
@@ -18,7 +18,7 @@ public class TokenReader {
             pos++;
             return value;
         } catch (NumberFormatException e) {
-            throw new InvalidInputException("Token invalido: '" + token + "' no es un entero.", e);
+            throw new InvalidInputException("Token inválido: '" + token + "' no es un entero.", e);
         }
     }
 
