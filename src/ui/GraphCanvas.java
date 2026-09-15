@@ -23,6 +23,7 @@ public class GraphCanvas extends JPanel {
     private static final Color LABEL_TEXT = new Color(0, 255, 245);
     private static final Color ERROR_TEXT = new Color(255, 42, 109);
     private static final Color TEXT_DIM = new Color(120, 120, 160);
+    private static final Color STATUS_TEXT = new Color(255, 149, 0);
 
     private List<Node> nodes = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
@@ -31,6 +32,7 @@ public class GraphCanvas extends JPanel {
     private boolean directed = false;
     private String nodeLabel = null;
     private String errorOverride = null;
+    private String statusMessage = null;
 
     public GraphCanvas() {
         setBackground(BG);
@@ -68,12 +70,23 @@ public class GraphCanvas extends JPanel {
         repaint();
     }
 
+    public void setStatusMessage(String message) {
+        this.statusMessage = message;
+        repaint();
+    }
+
+    public void clearStatusMessage() {
+        this.statusMessage = null;
+        repaint();
+    }
+
     public void clearAll() {
         nodes.clear();
         edges.clear();
         highlightedEdges.clear();
         cycleEdges.clear();
         errorOverride = null;
+        statusMessage = null;
         nodeLabel = null;
         repaint();
     }
@@ -117,6 +130,9 @@ public class GraphCanvas extends JPanel {
 
         drawEdges(g2);
         drawNodes(g2);
+        if (statusMessage != null) {
+            drawStatus(g2);
+        }
         g2.dispose();
     }
 
@@ -132,10 +148,10 @@ public class GraphCanvas extends JPanel {
 
             if (cycleEdges.contains(e)) {
                 color = EDGE_CYCLE;
-                stroke = new BasicStroke(3f);
+                stroke = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
             } else if (highlightedEdges.contains(e)) {
                 color = EDGE_HIGHLIGHT;
-                stroke = new BasicStroke(3f);
+                stroke = new BasicStroke(4f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
             } else if (isDiscarded(e)) {
                 color = EDGE_DISCARDED;
                 stroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, new float[]{6f, 4f}, 0f);
@@ -272,5 +288,18 @@ public class GraphCanvas extends JPanel {
             if (c.getSource() == e.getSource() && c.getTarget() == e.getTarget()) return false;
         }
         return true;
+    }
+
+    private void drawStatus(Graphics2D g2) {
+        g2.setFont(new Font("Consolas", Font.BOLD, 12));
+        FontMetrics fm = g2.getFontMetrics();
+        int textW = fm.stringWidth(statusMessage);
+        int x = (getWidth() - textW) / 2;
+        int y = getHeight() - 20;
+
+        g2.setColor(BG);
+        g2.fillRoundRect(x - 8, y - fm.getAscent() - 4, textW + 16, fm.getHeight() + 8, 8, 8);
+        g2.setColor(STATUS_TEXT);
+        g2.drawString(statusMessage, x, y);
     }
 }
