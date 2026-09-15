@@ -28,12 +28,12 @@ public class BellmanFordSolver {
     public long[] solve(int start) {
         Arrays.fill(affectedByPositiveCycle, false);
         long[] distances = new long[V];
-        Arrays.fill(distances, Long.MAX_VALUE);
+        Arrays.fill(distances, Long.MIN_VALUE);
         distances[start] = 0;
 
         for (int i = 0; i <= V; i++) {
             for (Edge e : edge) {
-                if (distances[e.getSource()] != Long.MAX_VALUE) {
+                if (distances[e.getSource()] != Long.MIN_VALUE) {
                     long newDist = distances[e.getSource()] + e.getWeight();
                     if (newDist > distances[e.getTarget()]) {
                         distances[e.getTarget()] = newDist;
