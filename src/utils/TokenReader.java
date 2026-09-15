@@ -1,19 +1,28 @@
- package utils;
+package utils;
 
-    public class TokenReader {
-        private final String[] tokens;
-        private int pos = 0;
+public class TokenReader {
+    private final String[] tokens;
+    private int pos = 0;
 
-        public TokenReader(String[] tokens) {
-            this.tokens = tokens;
+    public TokenReader(String[] tokens) {
+        this.tokens = tokens;
+    }
+
+    public int nextInt() throws InvalidInputException {
+        if (pos >= tokens.length) {
+            throw new InvalidInputException("Se esperaba un entero pero no hay mas tokens (posicion " + pos + ").");
         }
-
-        public int nextInt() {
-            return Integer.parseInt(tokens[pos++]);
-        }
-
-        public boolean hasNext() {
-            return pos < tokens.length;
+        String token = tokens[pos];
+        try {
+            int value = Integer.parseInt(token);
+            pos++;
+            return value;
+        } catch (NumberFormatException e) {
+            throw new InvalidInputException("Token invalido: '" + token + "' no es un entero.", e);
         }
     }
 
+    public boolean hasNext() {
+        return pos < tokens.length;
+    }
+}

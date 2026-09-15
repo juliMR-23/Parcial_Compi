@@ -1,4 +1,4 @@
-package utils;
+package parsers;
 
 import models.Edge;
 import java.util.List;

@@ -1,7 +1,7 @@
 package algorithms;
 
 import models.Edge;
-import utils.DijkstraCase;
+import parsers.DijkstraCase;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 
