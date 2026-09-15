@@ -1,6 +1,6 @@
 package algorithms;
 
-import utils.MinefieldCase;
+import parsers.MinefieldCase;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

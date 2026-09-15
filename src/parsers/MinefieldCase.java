@@ -1,4 +1,4 @@
-package utils;
+package parsers;
 
 public class MinefieldCase {
     public final int R, C;

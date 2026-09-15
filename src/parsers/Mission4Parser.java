@@ -1,6 +1,10 @@
-package utils;
+package parsers;
 
 import models.Edge;
+import utils.InputParser;
+import utils.InvalidInputException;
+import utils.TokenReader;
+
 import java.util.ArrayList;
 import java.util.List;
 

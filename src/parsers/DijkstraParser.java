@@ -1,6 +1,10 @@
-package utils;
+package parsers;
 
 import models.Edge;
+import utils.InputParser;
+import utils.InvalidInputException;
+import utils.TokenReader;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +34,6 @@ public class DijkstraParser {
                 int a = reader.nextInt();
                 int b = reader.nextInt();
                 int w = reader.nextInt();
-
-                // bidireccional: se agrega en ambos sentidos.
-                // "source" cambia según en qué lista vive la arista.
                 adj[a].add(new Edge(a, b, w));
                 adj[b].add(new Edge(b, a, w));
             }
