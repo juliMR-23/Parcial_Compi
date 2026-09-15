@@ -65,12 +65,16 @@ public class Mission1Panel extends MissionPanel {
                     sb.append(dfsResult == -1 ? "unreachable" : dfsResult);
                 }
                 sb.append("\n");
-                caseNum++;
-            }
 
-            if (caseNum == 2) {
-                MinefieldCase mc = cases.get(0);
-                canvas.setGrid(mc.R, mc.C, mc.bomb, mc.startRow, mc.startCol, mc.finalRow, mc.finalCol);
+                if (caseNum == 1) {
+                    MinefieldCase mc0 = cases.get(0);
+                    canvas.setGrid(mc0.R, mc0.C, mc0.bomb, mc0.startRow, mc0.startCol, mc0.finalRow, mc0.finalCol);
+                    canvas.setBfsPath(bfsSolver.getPath());
+                    canvas.setDfsPath(dfsSolver.getTraversalOrder());
+                    canvas.setShowDfsNumbers(true);
+                }
+
+                caseNum++;
             }
 
             return sb.toString().trim();

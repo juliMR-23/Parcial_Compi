@@ -57,23 +57,24 @@ public class Mission2Panel extends MissionPanel {
                     sb.append(result);
                 }
                 sb.append("\n");
-                caseNum++;
-            }
 
-            if (caseNum == 2) {
-                DijkstraCase dc = cases.get(0);
-                Graph graph = new Graph(false);
-                for (int i = 0; i < dc.N; i++) {
-                    graph.addNode(new Node(i));
-                }
-                for (int i = 0; i < dc.N; i++) {
-                    for (Edge e : dc.adj[i]) {
-                        if (e.getSource() < e.getTarget()) {
-                            graph.addEdge(e);
+                if (caseNum == 1) {
+                    Graph graph = new Graph(false);
+                    for (int i = 0; i < dc.N; i++) {
+                        graph.addNode(new Node(i));
+                    }
+                    for (int i = 0; i < dc.N; i++) {
+                        for (Edge e : dc.adj[i]) {
+                            if (e.getSource() < e.getTarget()) {
+                                graph.addEdge(e);
+                            }
                         }
                     }
+                    canvas.setData(graph.getNodes(), graph.getEdges(), false);
+                    canvas.setHighlightedEdges(solver.getPathEdges());
                 }
-                canvas.setData(graph.getNodes(), graph.getEdges(), false);
+
+                caseNum++;
             }
 
             return sb.toString().trim();
