@@ -11,18 +11,18 @@ import java.util.List;
 public class GraphCanvas extends JPanel {
 
     private static final Color BG = new Color(10, 10, 26);
-    private static final Color NODE_FILL = new Color(40, 40, 70);
-    private static final Color NODE_STROKE = new Color(100, 100, 140);
+    private static final Color NODE_FILL = new Color(45, 55, 110);      // azul más saturado (antes 40,40,70)
+    private static final Color NODE_STROKE = new Color(140, 160, 255);  // borde violeta claro (antes 100,100,140)
     private static final Color NODE_TEXT = Color.WHITE;
-    private static final Color EDGE_DEFAULT = new Color(70, 70, 100);
-    private static final Color EDGE_HIGHLIGHT = new Color(0, 255, 245);   // cyan neon
-    private static final Color EDGE_MST = new Color(5, 255, 161);        // green neon
-    private static final Color EDGE_CYCLE = new Color(255, 149, 0);      // amber neon
-    private static final Color EDGE_DISCARDED = new Color(60, 60, 90);
-    private static final Color WEIGHT_TEXT = new Color(200, 200, 220);
+    private static final Color EDGE_DEFAULT = new Color(110, 120, 200); // arista base más visible (antes 70,70,100)
+    private static final Color EDGE_HIGHLIGHT = new Color(0, 255, 245);   // cyan neon (sin cambios)
+    private static final Color EDGE_MST = new Color(5, 255, 161);        // green neon (sin cambios)
+    private static final Color EDGE_CYCLE = new Color(255, 149, 0);      // amber neon (sin cambios)
+    private static final Color EDGE_DISCARDED = new Color(90, 95, 130);  // gris-azul, pero más claro (antes 60,60,90)
+    private static final Color WEIGHT_TEXT = new Color(220, 225, 255);   // texto de peso más blanco (antes 200,200,220)
     private static final Color LABEL_TEXT = new Color(0, 255, 245);
     private static final Color ERROR_TEXT = new Color(255, 42, 109);
-    private static final Color TEXT_DIM = new Color(120, 120, 160);
+    private static final Color TEXT_DIM = new Color(160, 165, 210);      // más legible (antes 120,120,160)
     private static final Color STATUS_TEXT = new Color(255, 149, 0);
 
     private List<Node> nodes = new ArrayList<>();
