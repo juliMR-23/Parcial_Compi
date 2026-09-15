@@ -35,7 +35,7 @@ public class TestMission3 {
         long[] bfr = bellman.solve(mc.S);
         assertEquals("Max churun S->D", 110, fwr[mc.S][mc.D]);
         assertEquals("Bellman dist S->D", 110, bfr[mc.D]);
-        assertEquals("Not affected by cycle", false, bellman.isAffectedByPositiveCycle(mc.D));
+        assertEquals("Not affected by cycle", false, bellman.canReachFromCycle(mc.D));
     }
 
     static void testPositiveCycle() throws Exception {
@@ -50,7 +50,7 @@ public class TestMission3 {
         }
         floyd.solve();
         bellman.solve(mc.S);
-        assertEquals("Affected by positive cycle", true, bellman.isAffectedByPositiveCycle(mc.D));
+        assertEquals("Affected by positive cycle", true, bellman.canReachFromCycle(mc.D));
     }
 
     static void testUnreachable() throws Exception {
@@ -74,7 +74,7 @@ public class TestMission3 {
             bellman.addEdge(e.getSource(), e.getTarget(), e.getWeight());
         }
         bellman.solve(mc.S);
-        assertEquals("No cycle in simple path", false, bellman.isAffectedByPositiveCycle(1));
+        assertEquals("No cycle in simple path", false, bellman.canReachFromCycle(1));
     }
 
     static void assertEquals(String name, long expected, long actual) {
