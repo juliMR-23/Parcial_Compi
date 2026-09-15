@@ -61,19 +61,23 @@ public class Mission4Panel extends MissionPanel {
                     sb.append(result);
                 }
                 sb.append("\n");
-                caseNum++;
-            }
 
-            if (caseNum == 2) {
-                Mission4Case mc = cases.get(0);
-                Graph graph = new Graph(false);
-                for (int i = 1; i <= mc.N; i++) {
-                    graph.addNode(new Node(i));
+                if (caseNum == 1) {
+                    Graph graph = new Graph(false);
+                    for (int i = 1; i <= mc.N; i++) {
+                        graph.addNode(new Node(i));
+                    }
+                    for (Edge e : mc.edges) {
+                        graph.addEdge(e);
+                    }
+                    canvas.setData(graph.getNodes(), graph.getEdges(), false);
+
+                    if (result != -1) {
+                        canvas.setHighlightedEdges(solver.getMstEdges());
+                    }
                 }
-                for (Edge e : mc.edges) {
-                    graph.addEdge(e);
-                }
-                canvas.setData(graph.getNodes(), graph.getEdges(), false);
+
+                caseNum++;
             }
 
             return sb.toString().trim();
