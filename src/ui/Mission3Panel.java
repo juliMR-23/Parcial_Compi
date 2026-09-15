@@ -72,27 +72,35 @@ public class Mission3Panel extends MissionPanel {
                 long maxChurun = floydResult[mc.S][mc.D];
 
                 sb.append("Case #").append(caseNum).append(": ");
-                if (bellmanResult[mc.D] == Long.MAX_VALUE) {
+                if (bellmanResult[mc.D] == Long.MIN_VALUE) {
                     sb.append("Limon blocked the way");
-                } else if (maxChurun == Long.MAX_VALUE) {
+                } else if (bellman.isAffectedByPositiveCycle(mc.D)) {
                     sb.append("Infinite churun!");
                 } else {
                     sb.append(maxChurun);
                 }
                 sb.append("\n");
-                caseNum++;
-            }
 
-            if (caseNum == 2) {
-                Mission3Case mc = cases.get(0);
-                Graph graph = new Graph(true);
-                for (int i = 0; i < mc.N; i++) {
-                    graph.addNode(new Node(i));
+                if (caseNum == 1) {
+                    Graph graph = new Graph(true);
+                    for (int i = 0; i < mc.N; i++) {
+                        graph.addNode(new Node(i));
+                    }
+                    for (Edge e : mc.edges) {
+                        graph.addEdge(e);
+                    }
+                    canvas.setData(graph.getNodes(), graph.getEdges(), true);
+
+                    if (bellman.isAffectedByPositiveCycle(mc.D)) {
+                        List<Edge> cycleEdges = floyd.getCycleEdges();
+                        canvas.setCycleEdges(cycleEdges);
+                    } else if (maxChurun != Long.MIN_VALUE) {
+                        List<Edge> pathEdges = floyd.getPathEdges(mc.S, mc.D);
+                        canvas.setHighlightedEdges(pathEdges);
+                    }
                 }
-                for (Edge e : mc.edges) {
-                    graph.addEdge(e);
-                }
-                canvas.setData(graph.getNodes(), graph.getEdges(), true);
+
+                caseNum++;
             }
 
             return sb.toString().trim();
