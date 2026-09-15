@@ -28,7 +28,7 @@ public class KruskalSolver {
 
     public long kruskal() {
         lastMstEdges = new ArrayList<>();
-        UnionFind uf = new UnionFind(V);
+        UnionFind uf = new UnionFind(V + 1);
         Collections.sort(edges);
         long totalCost = 0;
         for (Edge e : edges) {

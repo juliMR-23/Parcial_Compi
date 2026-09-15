@@ -15,6 +15,7 @@ public abstract class MissionPanel extends JPanel {
 
     protected final JTextArea inputArea;
     protected final JTextArea outputArea;
+    protected final JComboBox<String> caseSelector;
     private final App app;
 
     public MissionPanel(App app, Color accent) {
@@ -26,6 +27,13 @@ public abstract class MissionPanel extends JPanel {
         inputArea = createTextArea("Pega el input aqui...");
         outputArea = createTextArea(null);
         outputArea.setEditable(false);
+
+        caseSelector = new JComboBox<>();
+        caseSelector.setFont(new Font("Consolas", Font.BOLD, 11));
+        caseSelector.setBackground(BG_CARD);
+        caseSelector.setForeground(TEXT_LIGHT);
+        caseSelector.setPreferredSize(new Dimension(140, 28));
+        caseSelector.setVisible(false);
 
         JPanel center = new JPanel(new GridLayout(1, 2, 10, 0));
         center.setOpaque(false);
@@ -49,7 +57,13 @@ public abstract class MissionPanel extends JPanel {
         backBtn.addActionListener(e -> app.showMission("landing"));
         loadBtn.addActionListener(e -> inputArea.setText(getSampleInput()));
         runBtn.addActionListener(e -> onRun());
-        clearBtn.addActionListener(e -> { inputArea.setText(""); outputArea.setText(""); });
+        clearBtn.addActionListener(e -> {
+            inputArea.setText("");
+            outputArea.setText("");
+            outputArea.setForeground(TEXT_LIGHT);
+            caseSelector.removeAllItems();
+            caseSelector.setVisible(false);
+        });
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         panel.setOpaque(false);
@@ -57,6 +71,7 @@ public abstract class MissionPanel extends JPanel {
         panel.add(loadBtn);
         panel.add(runBtn);
         panel.add(clearBtn);
+        panel.add(caseSelector);
         return panel;
     }
 

@@ -18,6 +18,13 @@ public class Mission3Panel extends MissionPanel {
     private static final Color ACCENT = new Color(255, 42, 109);
     private final GraphCanvas canvas;
 
+    private List<Mission3Case> cases;
+    private List<Long> maxChuruns = new ArrayList<>();
+    private List<Boolean> hasInfinite = new ArrayList<>();
+    private List<Boolean> isBlocked = new ArrayList<>();
+    private List<FloydWarshallSolver> floydSolvers = new ArrayList<>();
+    private List<BellmanFordSolver> bellmanSolvers = new ArrayList<>();
+
     private static final String SAMPLE = """
         3
         5 7 0 4
@@ -43,6 +50,13 @@ public class Mission3Panel extends MissionPanel {
         canvas = new GraphCanvas();
         add(new JScrollPane(canvas), BorderLayout.EAST);
         canvas.setPreferredSize(new Dimension(500, 0));
+
+        caseSelector.addActionListener(e -> {
+            int idx = caseSelector.getSelectedIndex();
+            if (idx >= 0 && cases != null && idx < cases.size()) {
+                showCase(idx);
+            }
+        });
     }
 
     @Override
@@ -53,11 +67,17 @@ public class Mission3Panel extends MissionPanel {
     @Override
     protected void onRun() {
         execute(() -> {
-            List<Mission3Case> cases = Mission3Parser.parse(inputArea.getText());
-            StringBuilder sb = new StringBuilder();
-            int caseNum = 1;
+            cases = Mission3Parser.parse(inputArea.getText());
+            maxChuruns.clear();
+            hasInfinite.clear();
+            isBlocked.clear();
+            floydSolvers.clear();
+            bellmanSolvers.clear();
 
-            for (Mission3Case mc : cases) {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < cases.size(); i++) {
+                Mission3Case mc = cases.get(i);
                 FloydWarshallSolver floyd = new FloydWarshallSolver(mc.N);
                 BellmanFordSolver bellman = new BellmanFordSolver(mc.N);
 
@@ -68,42 +88,66 @@ public class Mission3Panel extends MissionPanel {
 
                 long[][] floydResult = floyd.solve();
                 long[] bellmanResult = bellman.solve(mc.S);
-
                 long maxChurun = floydResult[mc.S][mc.D];
 
-                sb.append("Case #").append(caseNum).append(": ");
-                if (bellmanResult[mc.D] == Long.MIN_VALUE) {
+                floydSolvers.add(floyd);
+                bellmanSolvers.add(bellman);
+                maxChuruns.add(maxChurun);
+                hasInfinite.add(bellman.isAffectedByPositiveCycle(mc.D));
+                isBlocked.add(bellmanResult[mc.D] == Long.MIN_VALUE);
+
+                sb.append("Case #").append(i + 1).append(": ");
+                if (isBlocked.get(i)) {
                     sb.append("Limon blocked the way");
-                } else if (bellman.isAffectedByPositiveCycle(mc.D)) {
+                } else if (hasInfinite.get(i)) {
                     sb.append("Infinite churun!");
                 } else {
                     sb.append(maxChurun);
                 }
                 sb.append("\n");
-
-                if (caseNum == 1) {
-                    Graph graph = new Graph(true);
-                    for (int i = 0; i < mc.N; i++) {
-                        graph.addNode(new Node(i));
-                    }
-                    for (Edge e : mc.edges) {
-                        graph.addEdge(e);
-                    }
-                    canvas.setData(graph.getNodes(), graph.getEdges(), true);
-
-                    if (bellman.isAffectedByPositiveCycle(mc.D)) {
-                        List<Edge> cycleEdges = floyd.getCycleEdges();
-                        canvas.setCycleEdges(cycleEdges);
-                    } else if (maxChurun != Long.MIN_VALUE) {
-                        List<Edge> pathEdges = floyd.getPathEdges(mc.S, mc.D);
-                        canvas.setHighlightedEdges(pathEdges);
-                    }
-                }
-
-                caseNum++;
             }
+
+            caseSelector.removeActionListener(caseSelector.getActionListeners().length > 0 ? caseSelector.getActionListeners()[0] : null);
+            caseSelector.removeAllItems();
+            for (int i = 0; i < cases.size(); i++) {
+                caseSelector.addItem("Case #" + (i + 1));
+            }
+            caseSelector.setSelectedIndex(0);
+            caseSelector.setVisible(true);
+            caseSelector.addActionListener(e -> {
+                int idx = caseSelector.getSelectedIndex();
+                if (idx >= 0 && cases != null && idx < cases.size()) {
+                    showCase(idx);
+                }
+            });
+
+            showCase(0);
 
             return sb.toString().trim();
         });
+    }
+
+    private void showCase(int idx) {
+        Mission3Case mc = cases.get(idx);
+        Graph graph = new Graph(true);
+        for (int i = 0; i < mc.N; i++) {
+            graph.addNode(new Node(i));
+        }
+        for (Edge e : mc.edges) {
+            graph.addEdge(e);
+        }
+        canvas.setData(graph.getNodes(), graph.getEdges(), true);
+        canvas.setCycleEdges(new ArrayList<>());
+        canvas.setHighlightedEdges(new ArrayList<>());
+        canvas.clearStatusMessage();
+
+        if (isBlocked.get(idx)) {
+            canvas.setStatusMessage("Limon blocked the way");
+        } else if (hasInfinite.get(idx)) {
+            canvas.setCycleEdges(floydSolvers.get(idx).getCycleEdges());
+            canvas.setStatusMessage("Infinite churun!");
+        } else if (maxChuruns.get(idx) != Long.MIN_VALUE) {
+            canvas.setHighlightedEdges(floydSolvers.get(idx).getPathEdges(mc.S, mc.D));
+        }
     }
 }
