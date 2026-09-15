@@ -74,7 +74,7 @@ public abstract class MissionPanel extends JPanel {
 
     private JTextArea createTextArea(String prompt) {
         JTextArea area = new JTextArea();
-        area.setLineWrapStyle(true);
+        area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setFont(new Font("Consolas", Font.PLAIN, 13));
         area.setBackground(BG_CARD);

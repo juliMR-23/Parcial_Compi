@@ -14,7 +14,7 @@ public class DFSSolver {
         this.mc = mc;
     }
 
-    private int dfs(){
+    public int dfs(){
         if(mc.bomb[mc.startRow][mc.startCol]||mc.bomb[mc.finalRow][mc.finalCol]) return -1;
 
         boolean[][] visited = new boolean[mc.R][mc.C];
