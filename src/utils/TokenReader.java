@@ -18,7 +18,7 @@ public class TokenReader {
             pos++;
             return value;
         } catch (NumberFormatException e) {
-            throw new InvalidInputException("Token invalido: '" + token + "' no es un entero.");
+            throw new InvalidInputException("Token invalido: '" + token + "' no es un entero.", e);
         }
     }
 
