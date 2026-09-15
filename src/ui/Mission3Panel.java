@@ -17,6 +17,7 @@ public class Mission3Panel extends MissionPanel {
 
     private static final Color ACCENT = new Color(255, 42, 109);
     private final GraphCanvas canvas;
+    private final FloydMatrixCanvas matrixCanvas;
 
     private List<Mission3Case> cases;
     private List<Long> maxChuruns = new ArrayList<>();
@@ -48,8 +49,16 @@ public class Mission3Panel extends MissionPanel {
     public Mission3Panel(App app) {
         super(app, ACCENT);
         canvas = new GraphCanvas();
-        add(new JScrollPane(canvas), BorderLayout.EAST);
-        canvas.setPreferredSize(new Dimension(500, 0));
+        matrixCanvas = new FloydMatrixCanvas();
+
+        JSplitPane rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                new JScrollPane(canvas), new JScrollPane(matrixCanvas));
+        rightPanel.setDividerLocation(300);
+        rightPanel.setResizeWeight(0.6);
+        rightPanel.setOpaque(false);
+        rightPanel.setBorder(null);
+        add(rightPanel, BorderLayout.EAST);
+        rightPanel.setPreferredSize(new Dimension(620, 0));
 
         caseSelector.addActionListener(e -> {
             int idx = caseSelector.getSelectedIndex();
@@ -88,21 +97,30 @@ public class Mission3Panel extends MissionPanel {
 
                 long[][] floydResult = floyd.solve();
                 long[] bellmanResult = bellman.solve(mc.S);
-                long maxChurun = floydResult[mc.S][mc.D];
+                boolean floydUnbounded = floyd.isUnbounded(mc.S, mc.D);
+                boolean bellmanAffected = bellman.isAffectedByPositiveCycle(mc.D);
 
                 floydSolvers.add(floyd);
                 bellmanSolvers.add(bellman);
-                maxChuruns.add(maxChurun);
-                hasInfinite.add(bellman.isAffectedByPositiveCycle(mc.D));
-                isBlocked.add(bellmanResult[mc.D] == Long.MIN_VALUE);
+                maxChuruns.add(floydResult[mc.S][mc.D]);
+                hasInfinite.add(floydUnbounded || bellmanAffected);
+                isBlocked.add(!hasInfinite.get(i) && bellmanResult[mc.D] == Long.MIN_VALUE);
+
+                boolean mismatch = floydUnbounded != bellmanAffected;
 
                 sb.append("Case #").append(i + 1).append(": ");
                 if (isBlocked.get(i)) {
-                    sb.append("Limon blocked the way");
+                    sb.append("Limón blocked the way");
                 } else if (hasInfinite.get(i)) {
                     sb.append("Infinite churun!");
                 } else {
-                    sb.append(maxChurun);
+                    sb.append(maxChuruns.get(i));
+                }
+                sb.append("\n");
+
+                if (mismatch) {
+                    sb.append("  ** MISMATCH: Floyd=").append(floydUnbounded ? "inf" : floydResult[mc.S][mc.D])
+                      .append(" Bellman=").append(bellmanAffected ? "inf" : bellmanResult[mc.D]).append("\n");
                 }
                 sb.append("\n");
             }
@@ -141,13 +159,18 @@ public class Mission3Panel extends MissionPanel {
         canvas.setHighlightedEdges(new ArrayList<>());
         canvas.clearStatusMessage();
 
+        FloydWarshallSolver floyd = floydSolvers.get(idx);
+        matrixCanvas.setMatrix(floyd, floyd.getDistances(), mc.N);
+
         if (isBlocked.get(idx)) {
-            canvas.setStatusMessage("Limon blocked the way");
+            canvas.setStatusMessage("Limón blocked the way");
         } else if (hasInfinite.get(idx)) {
-            canvas.setCycleEdges(floydSolvers.get(idx).getCycleEdges());
+            canvas.setCycleEdges(floyd.getCycleEdges());
             canvas.setStatusMessage("Infinite churun!");
+            matrixCanvas.setHighlight(mc.S, mc.D);
         } else if (maxChuruns.get(idx) != Long.MIN_VALUE) {
-            canvas.setHighlightedEdges(floydSolvers.get(idx).getPathEdges(mc.S, mc.D));
+            canvas.setHighlightedEdges(floyd.getPathEdges(mc.S, mc.D));
+            matrixCanvas.setHighlight(mc.S, mc.D);
         }
     }
 }

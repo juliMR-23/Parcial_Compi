@@ -22,7 +22,7 @@ public class MineFieldParser {
             if (R == 0 && C == 0) break;
 
             if (R < 1 || C < 1) {
-                throw new InvalidInputException("Dimensiones invalidas: " + R + "x" + C);
+                throw new InvalidInputException("Dimensiones inválidas: " + R + "x" + C);
             }
 
             boolean[][] bomb = new boolean[R][C];
