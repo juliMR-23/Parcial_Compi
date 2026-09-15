@@ -32,7 +32,7 @@ public class DijkstraSolver {
 
             if (d > dist[u]) continue;
 
-            if (u == dc.dest) return d; 
+            if (u == dc.dest) return d;
 
             for (Edge e : dc.adj[u]) {
                 long nd = d + e.getWeight();
