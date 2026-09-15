@@ -1,5 +1,7 @@
 package utils;
 
 public class InputParser {
-    // TODO: Implementar por el usuario
+    public String[] tokenize(String input) {
+        return input.split("\\s+");
+    }
 }
