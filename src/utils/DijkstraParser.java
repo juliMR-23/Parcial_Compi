@@ -7,7 +7,7 @@ import java.util.List;
 public class DijkstraParser {
 
     @SuppressWarnings("unchecked")
-    public static List<DijkstraCase> parse(String rawInput) {
+    public static List<DijkstraCase> parse(String rawInput) throws InvalidInputException {
         InputParser tokenizer = new InputParser();
         String[] tokens = tokenizer.tokenize(rawInput.trim());
         TokenReader reader = new TokenReader(tokens);

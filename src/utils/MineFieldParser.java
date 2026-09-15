@@ -5,9 +5,9 @@ import java.util.List;
 
 public class MineFieldParser {
 
-    public static List<MinefieldCase> parse(String rawInput) {
+    public static List<MinefieldCase> parse(String rawInput) throws InvalidInputException {
         InputParser tokenizer = new InputParser();
-        String[] tokens = tokenizer.tokenize(rawInput.trim());
+        String[] tokens = tokenizer.tokenize(rawInput);
         TokenReader reader = new TokenReader(tokens);
 
         List<MinefieldCase> cases = new ArrayList<>();
@@ -15,7 +15,11 @@ public class MineFieldParser {
         while (reader.hasNext()) {
             int R = reader.nextInt();
             int C = reader.nextInt();
-            if (R == 0 && C == 0) break; // terminador, no se procesa
+            if (R == 0 && C == 0) break;
+
+            if (R < 1 || C < 1) {
+                throw new InvalidInputException("Dimensiones invalidas: " + R + "x" + C);
+            }
 
             boolean[][] bomb = new boolean[R][C];
             int bombRows = reader.nextInt();
