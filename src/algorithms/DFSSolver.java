@@ -4,6 +4,17 @@ import parsers.MinefieldCase;
 
 import java.util.*;
 
+/**
+ * DFS (Depth-First Search) iterativo para grilla de minas.
+ *
+ * Complejidad temporal:  O(R × C) — cada celda se visita a lo sumo una vez.
+ * Complejidad espacial: O(R × C) — matriz visited + pila de exploración.
+ *
+ * Elegido porque: el enunciado requiere DFS (exploración en profundidad) y
+ * que funcione con grillas de hasta 10^6 celdas. La versión recursiva causaría
+ * StackOverflowError; la iterativa usa ArrayDeque como pila explícita en heap.
+ */
+
 public class DFSSolver {
 
     private final MinefieldCase mc;
