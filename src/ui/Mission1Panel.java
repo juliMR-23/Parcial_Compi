@@ -7,12 +7,19 @@ import parsers.MinefieldCase;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Mission1Panel extends MissionPanel {
 
     private static final Color ACCENT = new Color(255, 149, 0);
     private final GridCanvas canvas;
+
+    private List<MinefieldCase> cases;
+    private List<Integer> bfsResults = new ArrayList<>();
+    private List<Integer> dfsResults = new ArrayList<>();
+    private List<List<int[]>> bfsPaths = new ArrayList<>();
+    private List<List<int[]>> dfsOrders = new ArrayList<>();
 
     private static final String SAMPLE = """
         10 10
@@ -35,6 +42,13 @@ public class Mission1Panel extends MissionPanel {
         canvas = new GridCanvas();
         add(new JScrollPane(canvas), BorderLayout.EAST);
         canvas.setPreferredSize(new Dimension(500, 0));
+
+        caseSelector.addActionListener(e -> {
+            int idx = caseSelector.getSelectedIndex();
+            if (idx >= 0 && cases != null && idx < cases.size()) {
+                showCase(idx);
+            }
+        });
     }
 
     @Override
@@ -45,39 +59,64 @@ public class Mission1Panel extends MissionPanel {
     @Override
     protected void onRun() {
         execute(() -> {
-            List<MinefieldCase> cases = MineFieldParser.parse(inputArea.getText());
-            StringBuilder sb = new StringBuilder();
-            int caseNum = 1;
+            cases = MineFieldParser.parse(inputArea.getText());
+            bfsResults.clear();
+            dfsResults.clear();
+            bfsPaths.clear();
+            dfsOrders.clear();
 
-            for (MinefieldCase mc : cases) {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < cases.size(); i++) {
+                MinefieldCase mc = cases.get(i);
                 BFSSolver bfsSolver = new BFSSolver(mc);
                 DFSSolver dfsSolver = new DFSSolver(mc);
 
                 int bfsResult = bfsSolver.bfs();
                 int dfsResult = dfsSolver.dfs();
 
+                bfsResults.add(bfsResult);
+                dfsResults.add(dfsResult);
+                bfsPaths.add(bfsSolver.getPath());
+                dfsOrders.add(dfsSolver.getTraversalOrder());
+
+                sb.append("Case #").append(i + 1).append(": ");
                 if (bfsResult == -1 && dfsResult == -1) {
-                    sb.append("Case #").append(caseNum).append(": Nina is unreachable");
+                    sb.append("Nina is unreachable");
                 } else {
-                    sb.append("Case #").append(caseNum).append(": BFS ");
+                    sb.append("BFS ");
                     sb.append(bfsResult == -1 ? "unreachable" : bfsResult);
                     sb.append(" DFS ");
                     sb.append(dfsResult == -1 ? "unreachable" : dfsResult);
                 }
                 sb.append("\n");
-
-                if (caseNum == 1) {
-                    MinefieldCase mc0 = cases.get(0);
-                    canvas.setGrid(mc0.R, mc0.C, mc0.bomb, mc0.startRow, mc0.startCol, mc0.finalRow, mc0.finalCol);
-                    canvas.setBfsPath(bfsSolver.getPath());
-                    canvas.setDfsPath(dfsSolver.getTraversalOrder());
-                    canvas.setShowDfsNumbers(true);
-                }
-
-                caseNum++;
             }
+
+            caseSelector.removeActionListener(caseSelector.getActionListeners().length > 0 ? caseSelector.getActionListeners()[0] : null);
+            caseSelector.removeAllItems();
+            for (int i = 0; i < cases.size(); i++) {
+                caseSelector.addItem("Case #" + (i + 1));
+            }
+            caseSelector.setSelectedIndex(0);
+            caseSelector.setVisible(true);
+            caseSelector.addActionListener(e -> {
+                int idx = caseSelector.getSelectedIndex();
+                if (idx >= 0 && cases != null && idx < cases.size()) {
+                    showCase(idx);
+                }
+            });
+
+            showCase(0);
 
             return sb.toString().trim();
         });
+    }
+
+    private void showCase(int idx) {
+        MinefieldCase mc = cases.get(idx);
+        canvas.setGrid(mc.R, mc.C, mc.bomb, mc.startRow, mc.startCol, mc.finalRow, mc.finalCol);
+        canvas.setBfsPath(bfsPaths.get(idx));
+        canvas.setDfsPath(dfsOrders.get(idx));
+        canvas.setShowDfsNumbers(true);
     }
 }
