@@ -25,6 +25,32 @@ En Windows (PowerShell):
 javac -d out -sourcepath src src/Main.java; java -cp out Main
 ```
 
+## Tests automáticos
+
+```bash
+# Compilar todo (app + tests)
+javac -d out -sourcepath src src/Main.java src/test/TestMission*.java
+
+# Ejecutar todos los tests
+java -cp out test.TestMission1
+java -cp out test.TestMission2
+java -cp out test.TestMission3
+java -cp out test.TestMission4
+```
+
+En Windows (PowerShell), si `javac` no está en el PATH:
+
+```powershell
+$J = "C:\Users\Usuario\.jdks\openjdk-26.0.1\bin"
+& "$J\javac.exe" -d out -sourcepath src src/Main.java src/test/TestMission*.java
+& "$J\java.exe" -cp out test.TestMission1
+& "$J\java.exe" -cp out test.TestMission2
+& "$J\java.exe" -cp out test.TestMission3
+& "$J\java.exe" -cp out test.TestMission4
+```
+
+Los tests cubren: sample cases del enunciado, unreachable, start==end, grafo desconectado, nodo único, ciclos positivos, grafo lineal.
+
 ## Estructura del proyecto
 
 ```
@@ -62,6 +88,11 @@ src/
 │   ├── Mission4Panel.java             → Kruskal (MST)
 │   ├── GraphCanvas.java               → Dibujo de grafos con aristas
 │   └── GridCanvas.java                → Dibujo de grilla R×C
+├── test/                              → Pruebas automáticas (30 tests)
+│   ├── TestMission1.java              → 10 tests (BFS/DFS)
+│   ├── TestMission2.java              → 7 tests (Dijkstra)
+│   ├── TestMission3.java              → 6 tests (Floyd/Bellman)
+│   └── TestMission4.java              → 7 tests (Kruskal)
 └── utils/                             → Utilidades de parseo genérico
     ├── InputParser.java               → Tokenizador
     ├── TokenReader.java               → Lector secuencial de tokens
