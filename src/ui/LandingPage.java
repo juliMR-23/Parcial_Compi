@@ -1,9 +1,11 @@
 package ui;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 
 public class LandingPage extends JPanel {
 
@@ -35,12 +37,12 @@ public class LandingPage extends JPanel {
         title.setHorizontalAlignment(SwingConstants.CENTER);
         title.setBorder(BorderFactory.createEmptyBorder(35, 0, 5, 0));
 
-        JLabel subtitle = new JLabel("\u25C6  Pola  \u25C6  Minerva  \u25C6  Nina  \u25C6  Lim\u00f3n  \u25C6");
+        JLabel subtitle = new JLabel("Pola  |  Minerva  |  Nina  |  Limón  |  Nero");
         subtitle.setForeground(NEON_MAGENTA);
         subtitle.setFont(new Font("Consolas", Font.PLAIN, 12));
         subtitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel tagline = new JLabel("Decodifica los grafos. Rescata a Nina. Derrota a Lim\u00f3n.");
+        JLabel tagline = new JLabel("Decodifica los grafos. Rescata a Nina. Derrota a Limón.");
         tagline.setForeground(TEXT_DIM);
         tagline.setFont(new Font("Consolas", Font.ITALIC, 11));
         tagline.setHorizontalAlignment(SwingConstants.CENTER);
@@ -60,14 +62,18 @@ public class LandingPage extends JPanel {
         grid.setBackground(BG);
         grid.setBorder(BorderFactory.createEmptyBorder(20, 50, 30, 50));
 
-        grid.add(createMissionCard("MISI\u00d3N 1", "Pola", "BFS & DFS", NEON_AMBER,
-            "Rescata Nina del campo de minas", "mission1"));
-        grid.add(createMissionCard("MISI\u00d3N 2", "Minerva", "Dijkstra", NEON_VIOLET,
-            "Recupera las cuentas de Claude", "mission2"));
-        grid.add(createMissionCard("MISI\u00d3N 3", "Nina", "Floyd-Warshall & Bellman-Ford", NEON_PINK,
-            "El almac\u00e9n definitivo de churun", "mission3"));
-        grid.add(createMissionCard("MISI\u00d3N 4", "Lim\u00f3n", "Kruskal", NEON_GREEN,
-            "Reconecta la red destruida", "mission4"));
+        grid.add(createMissionCard("MISIÓN 1", "BFS & DFS", NEON_AMBER,
+            "Navega un campo de minas R×C: halla la distancia mínima (BFS) y el orden de exploración (DFS) desde el inicio hasta Nina",
+            "mission1"));
+        grid.add(createMissionCard("MISIÓN 2", "Dijkstra", NEON_VIOLET,
+            "Grafo ponderado no dirigido: calcula el camino de menor costo entre el origen y el destino con pesos no negativos",
+            "mission2"));
+        grid.add(createMissionCard("MISIÓN 3", "Floyd-Warshall & Bellman-Ford", NEON_PINK,
+            "Maximiza el churun recolectado en un grafo dirigido. Detecta ciclos de ganancia positiva → «Infinite churun!»",
+            "mission3"));
+        grid.add(createMissionCard("MISIÓN 4", "Kruskal", NEON_GREEN,
+            "Reconecta la red destruida con el costo mínimo posible (MST). Si no se puede conectar todo → «Limon cut too many cables»",
+            "mission4"));
 
         JPanel wrapper = new JPanel(new BorderLayout());
         wrapper.setBackground(BG);
@@ -75,62 +81,93 @@ public class LandingPage extends JPanel {
         return wrapper;
     }
 
-    private JPanel createMissionCard(String mission, String hero, String algorithm,
+    private static class RoundedBorder extends AbstractBorder {
+        private final Color color;
+        private final int thickness;
+        private final int radius;
+
+        RoundedBorder(Color color, int thickness, int radius) {
+            this.color = color;
+            this.thickness = thickness;
+            this.radius = radius;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color);
+            g2.setStroke(new BasicStroke(thickness));
+            g2.draw(new RoundRectangle2D.Double(x + thickness / 2.0, y + thickness / 2.0,
+                    w - thickness, h - thickness, radius, radius));
+            g2.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            int pad = thickness + 4;
+            return new Insets(pad, pad, pad, pad);
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+    }
+
+    private JPanel createMissionCard(String mission, String algorithm,
                                       Color neonColor, String description, String cardName) {
-        JLabel missionLabel = new JLabel(mission);
+        int radius = 16;
+        int pad = 20;
+
+        JLabel missionLabel = new JLabel(mission, SwingConstants.CENTER);
         missionLabel.setForeground(neonColor);
-        missionLabel.setFont(new Font("Consolas", Font.BOLD, 11));
+        missionLabel.setFont(new Font("Consolas", Font.BOLD, 10));
 
-        JLabel heroLabel = new JLabel(hero);
-        heroLabel.setForeground(Color.WHITE);
-        heroLabel.setFont(new Font("Consolas", Font.BOLD, 18));
+        JLabel algoLabel = new JLabel("<html><div style='text-align:center;'>" + algorithm + "</div></html>", SwingConstants.CENTER);
+        algoLabel.setForeground(Color.WHITE);
+        algoLabel.setFont(new Font("Consolas", Font.BOLD, 15));
 
-        JLabel algoLabel = new JLabel("<html><i>" + algorithm + "</i></html>");
-        algoLabel.setForeground(neonColor.darker());
-        algoLabel.setFont(new Font("Consolas", Font.PLAIN, 11));
-
-        JLabel descLabel = new JLabel("<html>" + description + "</html>");
+        JLabel descLabel = new JLabel("<html><div style='text-align:center; word-wrap:break-word;'>" + description + "</div></html>", SwingConstants.CENTER);
         descLabel.setForeground(TEXT_DIM);
         descLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
 
         JPanel textPanel = new JPanel();
         textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
-        textPanel.setBackground(BG_CARD);
-        textPanel.add(missionLabel);
-        textPanel.add(Box.createVerticalStrut(6));
-        textPanel.add(heroLabel);
-        textPanel.add(Box.createVerticalStrut(10));
-        textPanel.add(algoLabel);
-        textPanel.add(Box.createVerticalStrut(8));
-        textPanel.add(descLabel);
+        textPanel.setOpaque(false);
+        textPanel.setBorder(BorderFactory.createEmptyBorder(pad - 4, pad, pad, pad));
+        textPanel.add(center(missionLabel));
+        textPanel.add(Box.createVerticalStrut(12));
+        textPanel.add(center(algoLabel));
+        textPanel.add(Box.createVerticalStrut(20));
+        textPanel.add(center(descLabel));
 
-        JPanel card = new JPanel(new BorderLayout());
+        JPanel card = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fill(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), radius, radius));
+                g2.dispose();
+            }
+        };
+        card.setOpaque(false);
         card.setBackground(BG_CARD);
-        card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(neonColor, 1),
-            BorderFactory.createEmptyBorder(20, 18, 20, 18)
-        ));
-        card.setPreferredSize(new Dimension(200, 220));
+        card.setBorder(new RoundedBorder(neonColor, 1, radius));
+        card.setPreferredSize(new Dimension(200, 250));
         card.add(textPanel, BorderLayout.CENTER);
         card.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         card.addMouseListener(new MouseAdapter() {
-            private Color currentColor = neonColor;
             @Override
             public void mouseEntered(MouseEvent e) {
-                currentColor = neonColor;
-                card.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(neonColor, 2),
-                    BorderFactory.createEmptyBorder(19, 17, 19, 17)
-                ));
+                card.setBorder(new RoundedBorder(neonColor, 2, radius));
                 card.repaint();
             }
             @Override
             public void mouseExited(MouseEvent e) {
-                card.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(neonColor, 1),
-                    BorderFactory.createEmptyBorder(20, 18, 20, 18)
-                ));
+                card.setBorder(new RoundedBorder(neonColor, 1, radius));
                 card.repaint();
             }
             @Override
@@ -142,8 +179,20 @@ public class LandingPage extends JPanel {
         return card;
     }
 
+    private static JPanel center(Component comp) {
+        JPanel wrapper = new JPanel(new GridBagLayout());
+        wrapper.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        wrapper.add(comp, gbc);
+        return wrapper;
+    }
+
     private JLabel createFooter() {
-        JLabel footer = new JLabel("The Feline Graph Chronicles \u2014 Lenguajes y Compiladores");
+        JLabel footer = new JLabel("The Feline Graph Chronicles — Lenguajes y Compiladores");
         footer.setForeground(new Color(50, 50, 80));
         footer.setFont(new Font("Consolas", Font.PLAIN, 10));
         footer.setHorizontalAlignment(SwingConstants.CENTER);

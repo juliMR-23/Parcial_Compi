@@ -41,7 +41,7 @@ public abstract class MissionPanel extends JPanel {
     protected abstract void onRun();
 
     private JPanel createButtons(Color accent) {
-        JButton backBtn = createButton("\u2190 Volver", TEXT_DIM);
+        JButton backBtn = createButton("← Volver", TEXT_DIM);
         JButton loadBtn = createButton("Cargar muestra", new Color(52, 152, 219));
         JButton runBtn = createButton("Ejecutar", accent);
         JButton clearBtn = createButton("Limpiar", TEXT_DIM);
