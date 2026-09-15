@@ -60,7 +60,6 @@ Antes de este proyecto no tenía un patrón claro para separar "leer el input" d
 ## Lo que cada miembro aprendió
 
 ### Julián
-- **DFS iterativo**: No sabía que DFS recursivo causaría StackOverflow en grillas de 10^6 celdas. Aprendió a usar `ArrayDeque` como pila explícita y por qué es necesario para problemas de escala.
 - **Bellman-Ford para detección de ciclos**: Aprendió que la iteración N (después de N-1 relajaciones) permite identificar nodos afectados por ciclos de ganancia positiva.
 - **Union-Find**: No conocía path compression ni union by rank. Aprendió que hacen las operaciones prácticamente O(1).
 
