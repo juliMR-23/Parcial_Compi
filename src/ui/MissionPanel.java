@@ -20,9 +20,9 @@ public abstract class MissionPanel extends JPanel {
 
     public MissionPanel(App app, Color accent) {
         this.app = app;
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(8, 8));
         setBackground(BG);
-        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         inputArea = createTextArea("Pega el input aqui...");
         outputArea = createTextArea(null);
@@ -35,14 +35,17 @@ public abstract class MissionPanel extends JPanel {
         caseSelector.setPreferredSize(new Dimension(140, 28));
         caseSelector.setVisible(false);
 
-        JPanel center = new JPanel(new GridLayout(1, 2, 10, 0));
-        center.setOpaque(false);
-        center.add(createSection("INPUT", new JScrollPane(inputArea)));
-        center.add(createSection("OUTPUT", new JScrollPane(outputArea)));
+        JSplitPane textSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                createSection("INPUT", new JScrollPane(inputArea)),
+                createSection("OUTPUT", new JScrollPane(outputArea)));
+        textSplit.setDividerLocation(180);
+        textSplit.setResizeWeight(0.5);
+        textSplit.setOpaque(false);
+        textSplit.setBorder(null);
 
         JPanel buttons = createButtons(accent);
         add(buttons, BorderLayout.NORTH);
-        add(center, BorderLayout.CENTER);
+        add(textSplit, BorderLayout.CENTER);
     }
 
     protected abstract String getSampleInput();
@@ -91,11 +94,11 @@ public abstract class MissionPanel extends JPanel {
         JTextArea area = new JTextArea();
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setFont(new Font("Consolas", Font.PLAIN, 13));
+        area.setFont(new Font("Consolas", Font.PLAIN, 11));
         area.setBackground(BG_CARD);
         area.setForeground(TEXT_LIGHT);
         area.setCaretColor(NEON_CYAN);
-        area.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        area.setBorder(BorderFactory.createEmptyBorder(4, 6, 4, 6));
         if (prompt != null) {
             area.putClientProperty("JTextArea.placeholderText", prompt);
         }

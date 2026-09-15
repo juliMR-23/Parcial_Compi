@@ -35,7 +35,7 @@ public class Mission4Panel extends MissionPanel {
         super(app, ACCENT);
         canvas = new GraphCanvas();
         add(new JScrollPane(canvas), BorderLayout.EAST);
-        canvas.setPreferredSize(new Dimension(500, 0));
+        canvas.setPreferredSize(new Dimension(620, 0));
 
         caseSelector.addActionListener(e -> {
             int idx = caseSelector.getSelectedIndex();

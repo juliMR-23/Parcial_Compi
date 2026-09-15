@@ -58,7 +58,7 @@ public class Mission3Panel extends MissionPanel {
         rightPanel.setOpaque(false);
         rightPanel.setBorder(null);
         add(rightPanel, BorderLayout.EAST);
-        rightPanel.setPreferredSize(new Dimension(500, 0));
+        rightPanel.setPreferredSize(new Dimension(620, 0));
 
         caseSelector.addActionListener(e -> {
             int idx = caseSelector.getSelectedIndex();
