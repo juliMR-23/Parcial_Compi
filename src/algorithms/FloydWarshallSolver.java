@@ -4,6 +4,18 @@ import models.Edge;
 
 import java.util.*;
 
+/**
+ * Floyd-Warshall para caminos máximos entre todos los pares de nodos.
+ *
+ * Complejidad temporal:  O(V^3) — tres bucles anidados sobre V nodos.
+ * Complejidad espacial: O(V^2) — matriz distances de V×V + matriz next de V×V.
+ *
+ * Elegido porque: la misión pide el churun máximo entre S y D, y Floyd-Warshall
+ * calcula todos los pares en una sola pasada. La maximización se logra usando
+ * Long.MIN_VALUE como infinito y la comparación ">" en vez de "<".
+ * Un nodo i está en ciclo positivo si distances[i][i] > 0.
+ */
+
 public class FloydWarshallSolver {
     private int V;
     private long[][] distances;

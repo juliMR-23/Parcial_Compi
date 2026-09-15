@@ -5,6 +5,16 @@ import parsers.DijkstraCase;
 
 import java.util.*;
 
+/**
+ * Dijkstra para camino más corto en grafo ponderado no negativo.
+ *
+ * Complejidad temporal:  O((V + E) log V) — cada arista se inserta en la PriorityQueue a lo sumo una vez.
+ * Complejidad espacial: O(V + E) — array dist + adjacency list + PriorityQueue.
+ *
+ * Elegido porque: los pesos son no negativos y se necesita el camino mínimo
+ * entre un origen y un destino específico. Bellman-Ford sería O(V×E) innecesariamente más lento.
+ */
+
 public class DijkstraSolver {
 
     private final DijkstraCase dc;

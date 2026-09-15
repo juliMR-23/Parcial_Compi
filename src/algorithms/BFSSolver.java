@@ -4,6 +4,16 @@ import parsers.MinefieldCase;
 
 import java.util.*;
 
+/**
+ * BFS (Breadth-First Search) para grilla de minas.
+ *
+ * Complejidad temporal:  O(R × C) — cada celda se visita a lo sumo una vez.
+ * Complejidad espacial: O(R × C) — matrices dist y parent de tamaño R×C.
+ *
+ * Elegido porque: en una grilla sin pesos, BFS garantiza la distancia mínima
+ * (número de pasos) desde el inicio hasta la meta. DFS no garantiza optimalidad.
+ */
+
 public class BFSSolver {
 
     private final MinefieldCase mc;

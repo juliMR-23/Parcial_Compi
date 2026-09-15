@@ -6,6 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Bellman-Ford para detectar nodos afectados por ciclos de ganancia positiva.
+ *
+ * Complejidad temporal:  O(V × E) — V iteraciones sobre la lista de aristas.
+ * Complejidad espacial: O(V + E) — array distances + lista de aristas.
+ *
+ * Elegido porque: complementa a Floyd-Warshall con la capacidad de detectar
+ * propagación de ciclos desde el origen (si el start está en ciclo, todos los
+ * alcanzables quedan marcados). Corre V+1 iteraciones para propagar marcados.
+ */
+
 public class BellmanFordSolver {
     private int V;
     private List<Edge> edge;
